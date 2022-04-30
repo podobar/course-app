@@ -1,0 +1,47 @@
+
+<mat-drawer-container autosize [hasBackdrop]="true">
+  <div class="center">
+    <mat-nav-list>
+      <ng-container *ngFor="let subject of possibleSubjects; let lastSubject=last;">
+        <mat-list-item>
+          <h3 mat-line>{{subject.name}}</h3>
+          <p mat-line> {{subject.number}} </p>
+          <button mat-icon-button (click)="onEdit(subject.id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-list-item>
+        <mat-divider *ngIf="!lastSubject"></mat-divider>
+      </ng-container>
+    </mat-nav-list>
+  </div>
+  <mat-drawer #drawer mode="over">
+    <div class="center">
+      <form [formGroup]="createEditForm">
+        <mat-form-field appearance="fill">
+          <mat-label>Subject name</mat-label>
+          <input matInput
+                 required
+                 maxlength="40"
+                 formControlName="name"
+                 placeholder="Type name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Subject number</mat-label>
+          <input matInput
+                    number
+                    formControlName="number"
+                    placeholder="Type number" />
+        </mat-form-field>
+      </form>
+      <button mat-raised-button color="primary"
+              [disabled]="!createEditForm.valid"
+              (click)="onSubmit()">
+        {{editedSubjectId !== -1 ? 'Save' : 'Create'}}
+      </button>
+      <button mat-raised-button
+              (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </mat-drawer>
+</mat-drawer-container>

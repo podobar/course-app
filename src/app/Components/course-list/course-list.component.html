@@ -1,0 +1,56 @@
+<mat-drawer-container autosize [hasBackdrop]="true">
+  <div class="center">
+    <h1>Available Courses </h1>
+    <mat-card *ngFor="let course of courses">
+      <mat-card-title>{{course.name}}</mat-card-title>
+      <mat-card-content *ngIf="course.subjects"><i>Subjects: {{course.subjects | format}}</i></mat-card-content>
+      <mat-card-content>{{course.description}}</mat-card-content>
+      <mat-divider inset></mat-divider>
+      <mat-card-actions>
+        <button mat-raised-button (click)="onEdit(course.id)">Edit</button>
+        <button mat-raised-button color="warn" (click)="onDelete(course.id)">Delete</button>
+      </mat-card-actions>
+    </mat-card>
+    <button mat-raised-button color="primary" (click)="onCreate()">Add new</button>
+  </div>
+  <mat-drawer #drawer mode="over">
+    <div class="center">
+      <form [formGroup]="createEditForm">
+        <mat-form-field appearance="fill">
+          <mat-label>Course name</mat-label>
+          <input matInput
+                 required
+                 maxlength="30"
+                 formControlName="name"
+                 placeholder="Type name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Course description</mat-label>
+          <textarea matInput
+                    formControlName="description"
+                    placeholder="Type description"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Subjects:</mat-label>
+          <mat-select formControlName="subjects" multiple>
+            <ng-container *ngFor="let subject of possibleSubjects; let lastSubject=last;">
+              <mat-option [value]="subject">
+                {{subject.name}}
+              </mat-option>
+              <mat-divider *ngIf="!lastSubject"></mat-divider>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </form>
+      <button mat-raised-button color="primary"
+              [disabled]="!createEditForm.valid"
+              (click)="onSubmit()">
+        {{editedCourseId !== -1 ? 'Save' : 'Create'}}
+      </button>
+      <button mat-raised-button
+              (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </mat-drawer>
+</mat-drawer-container>
